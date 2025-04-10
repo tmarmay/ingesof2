@@ -1,3 +1,4 @@
+//Ejercicio 2
 const MAX = 4
 range T = 0..MAX
 
@@ -10,4 +11,24 @@ property BUTLER = BUTLER[0],
 BUTLER[i:0..4] = (when (i < 4) phil[T].sitdown -> BUTLER[i+1]
 				| when (i > 0) phil[T].arise -> BUTLER[i-1]).
 
-||DINERS(N=5)= forall [i:0..N-1] (phil[i]:PHIL || {phil[i].left,phil[((i-1)+N)%N].right}::FORK || BUTLER).
+//||DINERS(N=5)= forall [i:0..N-1] (phil[i]:PHIL || {phil[i].left,phil[((i-1)+N)%N].right}::FORK || BUTLER).
+
+//Ejercicio 13
+const N = 9
+range K = 0..N
+
+ASENSOR = (enter -> ASENSOR | exit -> ASENSOR).
+property MAX = MAX[0],
+MAX[i:K] = (when (i<N) enter -> MAX[i+1]
+		   |when (i>0) exit -> MAX[i-1]).
+||SYSTEM = (ASENSOR || MAX).
+
+// Ejercicio 14
+FLAG = (subo -> bajo -> FLAG).
+property VECINO = (subo -> entro -> bajo -> VECINO
+		 |espero -> VECINO).
+
+progress V1 = {n[1].subo}. 
+progress V2 = {n[2].subo}.
+
+||PROTOCOLO = (n[1..2]:VECINO || FLAG)/{ n[1..2].subo / subo, n[1..2].bajo/ bajo}.
