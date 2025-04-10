@@ -1,0 +1,57 @@
+// Ejercicio 2
+range N = 0..2
+range M = 0..2
+
+WRITER = (writer.acq -> WRITER_READY),
+WRITER_READY = (read -> WRITER_READY
+				| write -> WRITER_READY
+				| writer.rel -> WRITER).
+
+READER = (reader.acq -> READER_READY),
+READER_READY = (read -> READER_READY
+				| reader.rel -> READER).
+
+//i cuenta reader
+//j cuenta writer
+CONTROL = CONTROL[0][0],
+CONTROL[i:N][j:M] = (when (i == 0) writer.acq -> CONTROL[i][j+1]
+		   | when (j == 0) reader.acq -> CONTROL[i+1][j]
+		   | when (i > 0) reader.rel -> CONTROL[i-1][j]
+		   | when (j > 0) writer.rel -> CONTROL[i][j-1]).
+
+//||SYSTEM = (w[M]:WRITER || r[N]:READER || CONTROL)/{w[M].writer.acq / writer.acq,
+//												  w[M].writer.rel / writer.rel,
+//												  r[N].reader.acq / reader.acq,
+//												  r[N].reader.rel / reader.rel}.
+
+//Ejercicio 3 LIN26
+
+//Ejercicio 4 LIN27
+const M = 2
+range K = 1..3
+
+SALVAJE = (sirve -> SALVAJE).
+
+OLLA = OLLA[M],
+OLLA[i:0..M] = (when (i>0) sirve -> OLLA[i-1]
+				| when (i==0) llena -> OLLA[M]).
+
+COCINERO = (llena -> COCINERO).
+
+//||TRIBU = (s[K]:SALVAJE || OLLA || COCINERO)/{s[K].sirve / sirve}.
+
+//Ejercicio 5 LIN31
+const T = 4
+
+PRODUC = (produce -> PRODUC).
+CONSUM = (consume -> CONSUM).
+
+BUF = BUF[0],
+BUF[i:0..T] = ( when (i<T) produce -> BUF[i+1]
+			   |when (i > 0) consume -> BUF[i-1]).
+
+//||PROTOCOLO = (PRODUC || CONSUM || BUF).
+
+//Ejercicio 6
+
+//Ejercicio 9

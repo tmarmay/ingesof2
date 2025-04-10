@@ -1,0 +1,139 @@
+
+//Ejercicio 3
+TRAFFICLIGHT = (red->orange->green->orange
+ -> TRAFFICLIGHT).
+
+MEETING = (hello->converse->godbye->STOP). 
+
+JOB = (arrive->work->leave->JOB).
+
+GAME = (tree -> LOSE
+		| one -> WIN
+		| two -> WIN
+		),
+LOSE = (lose -> GAME),
+WIN = (win -> GAME).
+
+MOVIE = (ahead -> AHEAD),
+AHEAD = (left -> STOP | rigth -> MOVIE).
+
+
+FOURTICK (N=5) = FOURTICK[5], 
+FOURTICK[i:0..N] = ( when (i > 1) tick -> FOURTICK[i-1]
+                	| when (N==1) tick -> STOP).
+
+DOUBLE = (in[i:0..2] -> out[i] -> DOUBLE).
+
+PERSON = (weekend -> RUT1 | weekend -> RUT2),
+RUT1 = (sleep -> work -> PERSON),
+RUT2 = (sleep -> ACT),
+ACT = (play -> PERSON | shop -> PERSON).
+
+//Ejercicio 4
+range VAL = 0..2
+
+VARIABLE = VAR[0], //valor inicial 0
+
+VAR[v:VAL] = (read[v] -> VAR[v] 
+            | write[n:VAL] -> VAR[n]).
+
+//Ejercicio 5
+BISTABLE1 = (trigger -> one -> BISTABLE0),
+BISTABLE0 = (trigger -> zero -> BISTABLE1).
+//||SYSTEM = (BISTABLE1). // define que la ejecución comienza en BISTABLE1 (es decir, el primer estado es 1).
+
+//Ejercicio 6 
+//FATAL
+
+//Ejercicio 7
+MAQ = (veinte -> V_CINCO
+	  |diez -> PDIEZ 
+	  |cinco -> PCINCO
+	  ),
+
+//posibilidades 10
+PDIEZ = (cinco -> GASEOSA
+		|diez -> V_CINCO
+		|veinte -> V_QUINCE
+		),
+//posibilidades 5
+PCINCO = (cinco -> cinco -> GASEOSA
+		 |cinco -> diez -> V_CINCO
+		 |cinco -> veinte -> V_QUINCE
+		 |diez -> GASEOSA
+		 |veinte -> V_DIEZ
+		 ),
+
+// vueltos
+V_CINCO = (vuelto5 -> GASEOSA),
+V_QUINCE = (vuelto15 -> GASEOSA),
+V_DIEZ = (vuelto10 -> GASEOSA),
+
+//gaseosa
+GASEOSA = (gaseosa -> MAQ).
+
+//Ejercicio 8
+//FALTA
+
+//Ejercicio 9
+P = (a -> b -> P).
+Q = (c -> b -> Q).
+//||S1 = (P || Q).
+S2 = (a -> c -> b -> S2 | c -> a -> b -> S2).
+
+//Ejercicio 10
+const N = 2
+range T = 0..N
+
+DIR = (hab -> DIR_DES),
+DIR_DES = (desh -> DIR).
+
+EAST = (abrir -> EAST_AB),
+EAST_AB =(in -> EAST_AB
+		 | cerrar_in -> EAST).
+
+WEST = (abrir -> WEST_AB),
+WEST_AB =(in -> WEST_AB
+		 | cerrar_out -> WEST).
+
+CONTROLER = (hab -> abrir -> CONTR_AB[0]),
+CONTR_AB[n:T] = (when (n<N) in -> CONTR_AB[n+1]
+				|when (n>0) out -> CONTR_AB[n-1]
+				| desh -> cerrar_in -> CONTR_CE[n]),
+
+CONTR_CE[n:T] = (when (n>0) out -> CONTR_CE[n-1]
+				| when (n==0) cerrar_out -> CONTROLER).
+
+//|| MUSEUM = (EAST || WEST || CONTROLER || DIR). DESCOMENTAR
+
+
+//Ejercicio 11 
+//PREGUNTAR SI ESTA BIEN NO USAR BUFFER
+range K = 0..1
+
+CINTA = (in -> pin -> CINTAW),
+CINTAW = (wait -> CINTAW | pout -> out -> CINTA).
+
+PRENSA = (in -> pin -> pout -> PRENSA).
+
+//||CELULA = (CINTA || PRENSA).
+
+//Ejercicio 12
+CINTA2 = (ina -> pina -> CINTAW_A | inb -> pinb -> CINTAW_B),
+CINTAW_A = (wait -> CINTAW_A | pouta -> outa -> CINTA2),
+CINTAW_B = (wait -> CINTAW_B | poutb -> outb -> CINTA2).
+
+PRENSA2 = (ina -> pina -> pouta -> PRENSA2).
+TALADRO = (inb -> pinb -> poutb -> TALADRO).
+
+//||CELULA2 = (CINTA2 || PRENSA2 || TALADRO).
+
+//EXTRA
+const M = 3
+range O = 0..M
+TURN = (in -> TURN).
+CONTRO = (in -> COUNT[1]),
+COUNT[n:O] = (when (n<M) in -> COUNT[n+1]
+			 |when (n==M) ride -> CAR).
+CAR = (ride -> CAR).
+||TURNTILE = (TURN || CONTRO || CAR).
