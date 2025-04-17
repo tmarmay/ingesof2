@@ -1,34 +1,61 @@
 //Ejercicio 2
-const MAX = 4
-range T = 0..MAX
+//const MAX = 4
+//range T = 0..MAX
 
-FORK = (get -> put -> FORK).
-PHIL = (sitdown ->right.get->left.get
-        ->eat ->right.put->left.put
-        ->arise->PHIL).
+//FORK = (get -> put -> FORK).
+//PHIL = (sitdown ->right.get->left.get
+//        ->eat ->right.put->left.put
+//        ->arise->PHIL).
 
-property BUTLER = BUTLER[0],
-BUTLER[i:0..4] = (when (i < 4) phil[T].sitdown -> BUTLER[i+1]
-				| when (i > 0) phil[T].arise -> BUTLER[i-1]).
+//property BUTLER = BUTLER[0],
+//BUTLER[i:0..4] = (when (i < 4) phil[T].sitdown -> BUTLER[i+1]
+//				| when (i > 0) phil[T].arise -> BUTLER[i-1]).
 
 //||DINERS(N=5)= forall [i:0..N-1] (phil[i]:PHIL || {phil[i].left,phil[((i-1)+N)%N].right}::FORK || BUTLER).
 
 //Ejercicio 13
-const N = 9
-range K = 0..N
+//const N = 9
+//range K = 0..N
 
-ASENSOR = (enter -> ASENSOR | exit -> ASENSOR).
-property MAX = MAX[0],
-MAX[i:K] = (when (i<N) enter -> MAX[i+1]
-		   |when (i>0) exit -> MAX[i-1]).
-||SYSTEM = (ASENSOR || MAX).
+//ASENSOR = (enter -> ASENSOR | exit -> ASENSOR).
+//property MAX = MAX[0],
+//MAX[i:K] = (when (i<N) enter -> MAX[i+1]
+//		   |when (i>0) exit -> MAX[i-1]).
+//||SYSTEM = (ASENSOR || MAX).
 
 // Ejercicio 14
-FLAG = (subo -> bajo -> FLAG).
-property VECINO = (subo -> entro -> bajo -> VECINO
-		 |espero -> VECINO).
+//FLAG = (subo -> bajo -> FLAG).
+//property VECINO = (subo -> entro -> bajo -> VECINO
+//		 |espero -> VECINO).
 
-progress V1 = {n[1].subo}. 
-progress V2 = {n[2].subo}.
+//progress V1 = {n[1].subo}. 
+//progress V2 = {n[2].subo}.
+//||PROTOCOLO = (n[1..2]:VECINO || FLAG)/{ n[1..2].subo / subo, n[1..2].bajo/ bajo}.
 
-||PROTOCOLO = (n[1..2]:VECINO || FLAG)/{ n[1..2].subo / subo, n[1..2].bajo/ bajo}.
+//Ejercicio 14
+const True = 1
+const False = 0
+
+range Bool = False.. True
+set BoolActions = {setTrue, setFalse, [False], [True]}
+
+BOOLVAR = VAL[False],
+VAL[v:Bool] = ( setTrue -> VAL[True]
+				  | setFalse -> VAL[False]
+				  | [v] -> VAL[v]).
+
+//||FLAGS = (flag1:BOOLVAR || flag2:BOOLVAR)
+
+VE1 = (flag1.setTrue -> flag2[i:0..1] ->
+			(when (i==1) flag1.setFalse -> CAMP
+			|when (i==0) inside -> flag1.setFalse -> CAMP
+			)
+		).
+
+VE2 = (flag2.setTrue -> flag1[i:0..1] ->
+			(when (i==1) flag2.setFalse -> CAMP
+			|when (i==0) inside -> flag2.setFalse-> CAMP
+			)
+	  ).
+
+||CAMP = (VE1 || VE2 || ((flag1:BOOLVAR || flag2:BOOLVAR))).
