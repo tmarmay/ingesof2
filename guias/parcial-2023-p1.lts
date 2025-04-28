@@ -1,0 +1,33 @@
+// Parcial 1 2023
+//Ej5
+CINTA(N=5) = COUNT[0],
+COUNT[i:0..N] = (when (i<N) put -> COUNT[i+1]
+			  |when (i>0) get -> COUNT[i-1]
+			).
+
+SUJECION = (get -> ensambla -> SUJECION).
+ENSAMBLADOR = (ensambla -> ENSAMBLADOR).
+
+||LINEA = (cinta:CINTA(5) || sujecion:SUJECION || ensamblador:ENSAMBLADOR)/{sujecion.get / cinta.get,
+																			sujecion.ensambla / ensamblador.ensambla}.
+
+VERIFICADOR = (l1.get -> l2.get ->
+								(
+								  descarta -> VERIFICADOR
+								  |put -> VERIFICADOR
+								)
+			 | l2.get -> l1.get ->
+								(
+								  descarta -> VERIFICADOR
+								  |put -> VERIFICADOR
+								)
+				).
+
+EMBALAJE = (get -> disponible -> EMBALAJE).
+
+||SYS = ({l1,l2}:LINEA || verificador:VERIFICADOR || c3:CINTA || embalaje:EMBALAJE)/ {verificador.put / c3.put,
+																					  embalaje.get / c3.get,
+																					  verificador.l1.get / l1.cinta.ensambla,
+																					  verificador.l2.get / l2.cinta.ensambla,
+																					  l1.sujecion.ensambla / verificador.l1.get,
+																					  l2.sujecion.ensambla / verificador.l2.get}.
