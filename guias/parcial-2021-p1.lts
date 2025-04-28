@@ -1,0 +1,23 @@
+//Parcial1 2021
+//Ej 5
+CINTA(N=5) = COUNT[0],
+COUNT[i:0..N] = (when (i<N) put -> COUNT[i+1]
+				|when (i>0) get -> COUNT[i-1]).
+
+
+SU = (get -> sujeta -> SUWAIT),
+SUWAIT = (ensambla -> put -> SU).
+
+EN = (sujeta -> ensambla -> EN).
+
+||SYS = ({s1,s2}:SU || {e1,e2}:EN || {c1,c2}:CINTA)/{
+														s1.get / c1.get,
+														s1.sujeta / e1.sujeta,
+														e1.ensambla / s1.ensambla,
+
+														s2.get / s1.put,
+														s2.sujeta / e2.sujeta,
+														e2.ensambla / s2.ensambla,
+														s2.put / c2.put,
+														listo / c2.get														
+													 }.
