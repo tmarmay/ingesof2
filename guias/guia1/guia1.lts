@@ -43,8 +43,10 @@ BISTABLE0 = (trigger -> zero -> BISTABLE1).
 //||SYSTEM = (BISTABLE1). // define que la ejecución comienza en BISTABLE1 (es decir, el primer estado es 1).
 
 //Ejercicio 6 
-//FATAL
-
+SENSOR = SENSOR[5],
+SENSOR[v:0..9] = (when (v < 2) cero -> SENSOR[v]
+				 |when (v > 8) uno -> SENSOR[v]
+				 |when (v > 2 && v < 8) v -> SENSOR[v]).
 //Ejercicio 7
 MAQ = (veinte -> V_CINCO
 	  |diez -> PDIEZ 
@@ -73,7 +75,18 @@ V_DIEZ = (vuelto10 -> GASEOSA),
 GASEOSA = (gaseosa -> MAQ).
 
 //Ejercicio 8
-//FALTA
+range FREC = 88..108
+
+RADIO = RADIO[108],
+RADIO[v: FREC] = (on -> v -> RADIOP[v] | reset -> v -> RADIOP[v]).
+
+RADIOP = RADIOP[v: FREC],
+RADIOP[v: FREC] = (off -> RADIO[108] | scan -> v -> RADIOS[v-1]).
+
+RADIOS = RADIOS[v: FREC],
+RADIOS[v: FREC] = (when (v == 88) siguiente -> v -> RADIOS[108]
+				  |when (v != 88) siguiente -> v -> RADIOS[v-1]
+				  |estacion -> v -> RADIOP[v]).
 
 //Ejercicio 9
 P = (a -> b -> P).
@@ -136,4 +149,4 @@ CONTRO = (in -> COUNT[1]),
 COUNT[n:O] = (when (n<M) in -> COUNT[n+1]
 			 |when (n==M) ride -> CAR).
 CAR = (ride -> CAR).
-||TURNTILE = (TURN || CONTRO || CAR).
+//||TURNTILE = (TURN || CONTRO || CAR).

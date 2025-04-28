@@ -1,0 +1,23 @@
+CINTA = (siguiente -> (tipoA -> cinta_stopA -> CINTAWAITA
+					  |tipoB -> cinta_stopB -> CINTAWAITB)
+		),
+CINTAWAITA = (transporta2_prensa -> CINTA),
+CINTAWAITB = (transporta2_taladro -> CINTA).
+
+BRAZO1 = (cinta_stopA -> transporta_prensa -> deposita_prensa -> BRAZO1WAITA
+		 |cinta_stopB -> transporta_taladro -> deposita_taladro -> BRAZO1WAITB),
+BRAZO1WAITA = (transporta2_prensa -> BRAZO1),
+BRAZO1WAITB = (transporta2_taladro -> BRAZO1).
+
+PRENSA = (deposita_prensa -> prensar -> prensado -> PRENSAWAIT),
+PRENSAWAIT = (transporta2_prensa -> PRENSA).
+
+TALADRO = (deposita_taladro -> taladrar -> taladrado -> TALADROWAIT),
+TALADROWAIT = (transporta2_taladro -> TALADRO).
+
+BRAZO2 = (prensado -> transporta2_prensa -> BRAZO2
+		 |taladrado -> transporta2_taladro -> BRAZO2).
+
+||CELULA = (CINTA || BRAZO1 || PRENSA || TALADRO || BRAZO2)/{cinta_stop / cinta_stopA, cinta_stop / cinta_stopB}.
+
+

@@ -1,0 +1,29 @@
+//Ejercicio 14
+const True = 1
+const False = 0
+
+range Bool = False.. True
+set BoolActions = {setTrue, setFalse, [False], [True]}
+
+BOOLVAR = VAL[False],
+VAL[v:Bool] = ( setTrue -> VAL[True]
+				  | setFalse -> VAL[False]
+				  | [v] -> VAL[v]).
+
+||FLAGS = (flag1:BOOLVAR || flag2:BOOLVAR).
+
+VE1 = (flag1.setTrue -> flag2[i:0..1] ->
+			(when (i==1) flag1.setFalse -> VE1
+			|when (i==0) inside1 -> flag1.setFalse -> VE1
+			)
+		).
+
+VE2 = (flag2.setTrue -> flag1[i:0..1] ->
+			(when (i==1) flag2.setFalse -> VE2
+			|when (i==0) inside2 -> flag2.setFalse-> VE2
+			)
+	  ).
+
+||CAMP = (VE1 || VE2 || FLAGS).
+progress V1 = {inside1}
+progress V2 = {inside2}

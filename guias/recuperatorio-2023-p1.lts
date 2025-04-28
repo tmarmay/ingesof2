@@ -1,0 +1,32 @@
+
+// Ejercicio 5 
+// b)
+
+CINTA(N=5) = COUNT[0],
+COUNT[i:0..N] = (when (i<N) put -> COUNT[i+1]
+				|when (i>0) get -> COUNT[i-1]).
+
+ROBOT_PRENSA = (get_cinta1 -> leave_in_press -> RPWAIT),
+RPWAIT = (pressed -> 
+			(defect -> ROBOT_PRENSA
+			| leave_in_cinta2 -> ROBOT_PRENSA )
+		 ).
+
+PRENSA = (leave_in_press -> pressed -> PRENSA).
+
+ROBOT_TALADRO = (leave_in_cinta2 -> get_cinta2 -> drill -> RTWAIT
+				| defect -> ROBOT_TALADRO),
+RTWAIT = (drilled -> 
+			(defect2 -> ROBOT_TALADRO
+			| leave_in_cinta3 -> ROBOT_TALADRO)
+		 ).
+
+TALADRO = (drill -> drilled -> TALADRO).
+
+||SYS = (({c1,c2,c3}:CINTA || ROBOT_PRENSA || PRENSA || ROBOT_TALADRO || TALADRO)/{get_cinta1 / c1.get,
+																				 leave_in_cinta2 / c2.put,
+																				 get_cinta2 / c2.get,
+																				 leave_in_cinta3 / c3.put})
+																				<< {get_cinta1, leave_in_cinta3}.
+progress P1 = {leave_in_press}
+progress P2 = {drill}

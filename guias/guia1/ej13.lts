@@ -1,0 +1,19 @@
+//Ejercicio 12
+CINTA2 = (ina -> pina -> CINTAW_A | inb -> pinb -> CINTAW_B),
+CINTAW_A = (wait -> CINTAW_A | pouta -> outa -> CINTA2),
+CINTAW_B = (wait -> CINTAW_B | poutb -> outb -> CINTA2).
+
+PRENSA2 = (ina -> pina -> pouta -> PRENSA2).
+TALADRO = (inb -> pinb -> poutb -> TALADRO).
+
+//||CELULA2 = (CINTA2 || PRENSA2 || TALADRO).
+
+//EXTRA
+const M = 3
+range O = 0..M
+TURN = (in -> TURN).
+CONTRO = (in -> COUNT[1]),
+COUNT[n:O] = (when (n<M) in -> COUNT[n+1]
+			 |when (n==M) ride -> CAR).
+CAR = (ride -> CAR).
+//||TURNTILE = (TURN || CONTRO || CAR).

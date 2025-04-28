@@ -1,0 +1,12 @@
+CINTA = (siguiente -> cinta_stop -> CINTAWAIT),
+CINTAWAIT = (transporta2 -> CINTA).
+
+BRAZO1 = (cinta_stop -> transporta1 -> depocita_prensa -> BRAZO1WAIT),
+BRAZO1WAIT = (transporta2 -> BRAZO1).
+
+PRENSA = (depocita_prensa -> prensar -> prensado -> PRENSAWAIT),
+PRENSAWAIT = (transporta2 -> PRENSA).
+
+BRAZO2 = (prensado -> transporta2 -> BRAZO2).
+
+||CELULA = (CINTA || BRAZO1 || PRENSA || BRAZO2).
