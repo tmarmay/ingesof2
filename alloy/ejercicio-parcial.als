@@ -1,37 +1,33 @@
-sig VueloId, Ciudad, Horario {}
+// ejercicios 1 y 2 
+sig VueloID, Ciudad, Horario {}
 
-sig Aerolinea {
-	nro_vuelos: set VueloId,
-	ruta_directa: VueloId -> Ciudad -> Ciudad,
-	partidas: VueloId -> Horario,
-	arribos: VueloId -> Horario
+sig Aeroline{
+    nrovuelo: set VueloID,
+    ruta_directa : nrovuelo -> one Ciudad -> Ciudad,
+    partidas : nrovuelo -> one Horario,
+    arribos: nrovuelo ->  one Horario
+} 
+
+// ejercicio 3
+fact unico {
+    all a1,a2 : Aeroline | no ((a1.nrovuelo) & (a2.nrovuelo)) or a1=a2
 }
 
-///I: para cada aerolinea, cada vuelo tiene una unica ruta directa asociada, un unico horaio de partida y llegada
-pred unic[] {
-  all a: Aerolinea, v: VueloId |
-    v in a.nro_vuelos implies (
-      one c1, c2: Ciudad | v -> c1 -> c2 in a.ruta_directa and
-      one h1: Horario | v -> h1 in a.partidas and
-      one h2: Horario | v -> h2 in a.arribos
-    )
+//ejercicio 4 
+pred reach [a: Aeroline, c_org,c_dest : Ciudad]{
+    c_org -> c_dest in ^(a.ruta_directa[a.nrovuelo])
 }
 
-//II: todos los numero de vuelos tienen asignado una ruta directa y los horarios de partida y arrivo
-pred asig[]{
-  all a: Aerolinea, v: VueloId |
-    v in a.nro_vuelos implies (
-	
-    )
+fun origen [a:Aeroline, cd: Ciudad]: set Ciudad{
+    *( (a.ruta_directa[a.nrovuelo])) . cd
 }
 
-//III: numeros de vuelos globalmente unicos
-pred numeros_globales_unicos[] {
-	all a1, a2: Aerolinea | 
-		a1 != a2 implies no (a1.nro_vuelos & a2.nro_vuelos)
-}
+//dado un horario una ciudad de orgien y una de destino 
+//quiero construir las rutas que salen
+// hay un vuelo desde origen a destino en el horario con cualquier aerolinia
 
-fact {
-	asig[]
-	numeros_globales_unicos[]
+pred ruta_global [h: Horario, co,cd : Ciudad]{
+    let v = (Aeroline.partidas).h | 
+    // salida                           //
+    cd in (((Aeroline.ruta_directa)[v][co]) . * (Aeroline.ruta_directa[VueloID]))
 }
